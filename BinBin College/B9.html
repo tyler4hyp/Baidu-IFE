@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			div{
+				background-color: #fff;
+				margin: 8px;
+				padding: 8px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				border: black 1px solid;
+				font-size: xx-small;
+				flex-wrap: wrap;
+			}
+			#container{
+				width: 1200px;
+				margin: 0 auto;
+			}
+			#container>div>div>div>div{
+				margin: 0;
+				padding: 0;
+			}
+			#container>div>div>div{
+				border: black 1px solid;
+				margin: 0 10px;
+			}
+			#btn{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			#btn button{
+				margin: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">hero
+			<div>DC
+				<div>哥谭
+					<div>蝙蝠侠</div>
+					<div>罗宾</div>
+					<div>小丑</div>
+                    <div>猫女</div>
+				</div>
+				<div>大都会</div>
+				<div>中心城
+					<div>闪电侠</div>
+					<div>逆闪电</div>
+				</div>
+			</div>
+			<div>MARVEL
+				<div>复仇者
+					<div>钢铁侠</div>
+					<div>美队</div>
+					<div>黑寡妇</div>
+				</div>
+				<div>神盾
+					<div>2
+						<div>33</div>
+					</div>
+					<div>局长</div>
+				</div>
+			</div>
+			<div>other</div>
+		</div>
+		<p id="btn">
+		    <button id="bfs">BFS</button>
+		    <button id="dfs">DFS</button>
+		    <input type="text" id="input">
+		    <button id="checkbybfs">checkbyBFS</button>
+		    <button id="checkbydfs">checkbyDFS</button>
+		    <input type="text" id="addval">
+		    <button id="addbtn">add</button>
+		    <button id="delbtn">delete</button> 
+		<p>
+		<script>
+		    var root = document.getElementById('container');
+		    var openarr = [];
+		    var closearr = [];
+		    var input;
+		    var si = null;
+
+            function bfs(){
+		        while(openarr.length){
+			        var temp = openarr.shift();
+			        if(temp.children.length){
+				        for(var i=0; i<temp.children.length; i++){
+					        openarr.push(temp.children[i]);
+			            }
+			        }
+			        closearr.push(temp);
+		        }
+		    }
+			function dfs(){
+				while(openarr.length){
+					var temp = openarr.shift();
+					if(temp.children.length){
+						for(var i=temp.children.length-1; i>-1; i--){
+					        openarr.unshift(temp.children[i]);
+			            }
+					}
+					closearr.push(temp);
+				}
+			}
+			function draw(){
+				var temp = closearr.shift();
+				if(temp != undefined){
+					temp.style.backgroundColor = 'red';
+				}
+				var temp2 = closearr.pop();
+				if(temp2!=0 && temp2!=undefined){
+					temp2.style.backgroundColor = 'white';
+				}
+				closearr.push(temp);
+			}
+			function reset(){
+				openarr = [];
+		        closearr = [];
+		        clearInterval(si);
+		        var div = document.getElementsByTagName('div');
+		        for(var i=0; i<div.length; i++){
+			        div[i].style.backgroundColor = 'white';
+		        }
+			}
+            function checkdraw(){
+	            var temp = closearr.shift();
+				if(!closearr.length){
+					alert("don't exist!");
+					clearInterval(si);
+				}
+				if(temp != undefined){
+					temp.style.backgroundColor = 'red';
+				}
+				var temp2 = closearr.pop();
+				if(temp2!=0 && temp2!=undefined){
+					temp2.style.backgroundColor = 'white';
+				}
+				closearr.push(temp);
+				var pattern = /(^\s*)|(\s*$)/g;
+				var tempval = temp.firstChild.nodeValue.replace(pattern, "");
+				if(tempval == input){
+					alert("find target!");
+					closearr = [];
+					clearInterval(si);
+				}
+            }
+            function findtarget(){
+	            var div = document.getElementsByTagName('div');
+	            for(var i=0; i<div.length; i++){
+		            if(div[i].style.backgroundColor == 'green'){
+			            return div[i];
+			            break;
+		            }
+	            }
+            }
+            function elefun(ele){
+		        ele.onclick = function(e){
+				    this.style.backgroundColor = 'green';
+				    e.stopPropagation();
+			    }
+			    ele.ondblclick = function(e){
+				    this.style.backgroundColor = 'white';
+				    e.stopPropagation();
+		        }
+            }
+            document.addEventListener('click', function(e){
+            	var target = e.target;
+            	switch(target.id){
+            		case 'bfs':
+		            	reset();
+			            openarr.push(root);
+			            bfs();
+			            closearr.push(0);
+			            si = setInterval(draw, 500);
+			            break;
+			        case 'dfs':
+					    reset();
+			            openarr.push(root);
+			            dfs();
+			            closearr.push(0);
+			            si = setInterval(draw, 500);
+			            break;
+			        case 'checkbybfs':
+					    reset();
+			            openarr.push(root);
+			            bfs();
+			            closearr.push(0);
+			            input = document.getElementById('input').value;
+			            si = setInterval(checkdraw, 500);
+					    break;
+			        case 'checkbydfs':
+					    reset();
+			            openarr.push(root);
+			            dfs();
+			            closearr.push(0);
+			            input = document.getElementById('input').value;
+			            si = setInterval(checkdraw, 500);
+					    break;
+			        case 'addbtn':
+					    var target = findtarget();
+			            var addval = document.getElementById('addval').value;
+			            var ele = document.createElement('div');
+			            var eleval = document.createTextNode(addval);
+			            ele.appendChild(eleval);
+			            elefun(ele);
+			            target.appendChild(ele);
+					    break;
+			        case 'delbtn':
+					    var target = findtarget();
+			            target.parentNode.removeChild(target);
+					    break;
+            	}
+            });
+            function init(){
+	            var div = document.getElementsByTagName('div');
+	            for(var i=0; i<div.length; i++){
+		            elefun(div[i]);
+	            }
+            }
+            init();
+		</script>
+	</body>
+</html>

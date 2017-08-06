@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			div{
+				margin: 0;
+				padding: 0;
+			}
+			#show{
+				height: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div>
+				<input type="text" id="input">
+			</div>
+			<div>
+				<button type="button" id="leftin">左侧入</button>
+				<button type="button" id="leftout">左侧出</button>
+				<button type="button" id="rightin">右侧入</button>
+				<button type="button" id="rightout">右侧出</button>
+				<button type="button" id="mysort">排序</button>
+			</div>
+			<div id="show"></div>
+		</div>
+		<script type="text/javascript">
+			function mysort(){
+				var show = document.getElementById('show');
+				var arr = [];
+				var state = [];
+				for(var i=0; i<show.children.length; i++){
+					var pattern =/(.*)px/;
+                    arr.push(pattern.exec(show.children[i].style.height)[1]);
+				}
+				for(var i=0; i<arr.length; i++){
+					for(var j=0; j<arr.length-i; j++){
+						if(arr[j] > arr[j+1]){
+							var temp = arr[j];
+							arr[j] = arr[j+1];
+							arr[j+1] = temp;
+							state = state.concat(arr);
+						}
+					}
+				}
+				function redraw(){
+					for(var i=0; i<arr.length; i++){
+						var high = state.shift();
+						show.children[i].style.height = high+'px';
+						show.children[i].style.marginTop = (100-high)+'px';
+					}
+				}
+				var interid = setInterval(redraw, 1000);
+			}
+
+			function drawbar(input){
+				var div = document.createElement('div');
+				div.style.backgroundColor = 'red';
+				div.style.width = '30px';
+				div.style.height = input+'px';
+				div.style.cssFloat = 'left';
+				div.style.marginTop = (100-input)+'px';
+				div.addEventListener('click', function(){
+					show.removeChild(this);
+				})
+				return div;
+			}
+			function leftin(){
+				var input = document.getElementById('input').value;
+				if(input<10 || input>100){
+					alert("输入范围为10-100");
+					return false;
+				}
+				var show = document.getElementById('show');
+				if(show.children.length > 60){
+					alert("队列元素超过60");
+					return false;
+				}
+				var div = drawbar(input);
+				if(show.firstChild != null){
+					show.insertBefore(div, show.firstChild);
+				}else{
+					show.appendChild(div);
+				}
+			}
+			function leftout(){
+				var show = document.getElementById('show');
+				alert(show.firstChild.innerHTML);
+				show.removeChild(show.firstChild);
+			}
+			function rightin(){
+				var input = document.getElementById('input').value;
+				if(input<10 || input>100){
+					alert("输入范围为10-100");
+					return false;
+				}
+				var show = document.getElementById('show');
+				if(show.children.length > 60){
+					alert("队列元素超过60");
+					return false;
+				}
+				var div = drawbar(input);
+				show.appendChild(div);
+			}
+			function rightout(){
+				var show = document.getElementById('show');
+				alert(show.lastChild.innerHTML);
+				show.removeChild(show.lastChild);
+			}
+			function init(){
+				document.addEventListener('click', function(e){
+					var target = e.target;
+					switch(target.id){
+						case 'leftin':
+						    leftin();
+						    break;
+						case 'leftout':
+						    leftout();
+						    break;
+						case 'rightin':
+						    rightin();
+						    break;
+						case 'rightout':
+						    rightout();
+						    break;
+						case 'mysort':
+						    mysort();
+						    break;
+					}
+				});
+			}
+			init();
+		</script>
+	</body>
+</html>

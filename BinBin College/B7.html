@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			div{
+				background-color: #fff;
+			}
+			#container{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 800px;
+				height: 200px;
+				border: black 1px solid;
+				margin: 0 auto;
+			}
+			#container>div{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 360px;
+				height: 160px;
+				border: black 1px solid;
+				margin: 0 20px;
+			}
+			#container>div>div{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 160px;
+				height: 120px;
+				border: black 1px solid;
+				margin: 0 20px;
+			}
+			#container>div>div>div{
+				width: 40px;
+				height: 80px;
+				border: black 1px solid;
+				margin: 0 10px;
+			}
+			#btn{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			#btn button{
+				margin: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<div>
+				<div>
+					<div></div>
+					<div></div>
+				</div>
+				<div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+			<div>
+				<div>
+					<div></div>
+					<div></div>
+				</div>
+				<div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+		<div id="btn">
+		    <button id="preo">Pre-Order</button>
+		    <button id="ino">In-Order</button>
+		    <button id="posto">Post-Order</button>
+		<div>
+		<script>
+		    var root = document.getElementById('container');
+		    var path = [];
+		    var path2 = [];
+		    var st = null;
+			function preo(n){
+				if(n){
+					path.push(n);
+					preo(n.children[0]);
+					preo(n.children[1]);
+				}
+			}
+			function ino(n){
+				if(n){
+					ino(n.children[0]);
+					path.push(n);
+					ino(n.children[1]);
+				}
+			}
+			function posto(n){
+				if(n){
+					posto(n.children[0]);
+					posto(n.children[1]);
+					path.push(n);
+				}
+			}
+			function draw(){
+				var temp = path.shift();
+				var temp2 = path2.shift();
+				if(temp != null){
+					temp.style.backgroundColor = 'red';
+				}
+				if(temp2!=0 && temp2!=null){
+					temp2.style.backgroundColor = 'white';
+				}
+			}
+			document.addEventListener('click', function(e){
+				var target = e.target;
+				switch(target.id){
+					case 'preo':
+						path = [];
+				        path2 = [];
+			            clearInterval(st);
+			            preo(root);
+			            path2 = path.concat();
+						path2.unshift(0);
+						st = setInterval(draw, 500);
+						break;
+				    case 'ino':
+						path = [];
+				        path2 = [];
+			            clearInterval(st);
+			            ino(root);
+			            path2 = path.concat();
+						path2.unshift(0);
+						st = setInterval(draw, 500);
+						break;
+					case 'posto':
+						path = [];
+				        path2 = [];
+			            clearInterval(st);
+			            posto(root);
+			            path2 = path.concat();
+						path2.unshift(0);
+						st = setInterval(draw, 500);
+						break;
+				}
+			});
+		</script>
+	</body>
+</html>

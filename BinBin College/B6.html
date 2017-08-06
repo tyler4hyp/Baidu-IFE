@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			.show{
+				background-color: red;
+				margin: 10px;
+				padding: 10px;
+			}
+			textarea{
+				height: 100px;
+				width: 300px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div>
+				<textarea id="ta"></textarea>
+			</div>
+			<div>
+				<button type="button" id="leftin">左侧入</button>
+				<button type="button" id="leftout">左侧出</button>
+				<button type="button" id="rightin">右侧入</button>
+				<button type="button" id="rightout">右侧出</button>
+			</div>
+			<div><input type="text" id="checkinput"><button id="check">查询</button></div>
+			<p id="show"></p>
+		</div>
+		<script type="text/javascript">
+			function check(){
+				var show = document.getElementById('show');
+				var checkinput = document.getElementById('checkinput').value;
+				for(var i=0; i<show.children.length; i++){
+					if(show.children[i].innerHTML.indexOf(checkinput) != -1){
+					    show.children[i].style.backgroundColor = 'green';
+					}
+				}
+			}
+			function draw(input,fg){
+				var text = document.createTextNode(input);
+				var span = document.createElement('span');
+				span.appendChild(text);
+				span.setAttribute('class', 'show');
+				var show = document.getElementById('show');
+				span.addEventListener('click', function(){
+					show.removeChild(this);
+				})
+				if(fg==true && show.firstChild!=null){
+					show.insertBefore(span, show.firstChild);
+				}else{
+					show.appendChild(span);
+				}
+			}
+			function leftin(){
+				var ta = document.getElementById('ta').value;
+				var pattern = /\r|,|，|、|\s+/;
+				var result = ta.split(pattern);
+				for(var i=0; i<result.length; i++){
+					if(result[i] == ""){
+						result.splice(i, 1);
+						i--;
+					}
+				}
+				for(var i=0; i<result.length; i++){
+					draw(result[i],true);
+				}
+			}
+			function leftout(){
+				var show = document.getElementById('show');
+				alert(show.firstChild.innerHTML);
+				show.removeChild(show.firstChild);
+			}
+			function rightin(){
+				var ta = document.getElementById('ta').value;
+				var pattern = /\r|,|，|、|\s+/;
+				var result = ta.split(pattern);
+				for(var i=0; i<result.length; i++){
+					if(result[i] == ""){
+						result.splice(i, 1);
+						i--;
+					}
+				}
+				for(var i=0; i<result.length; i++){
+					draw(result[i],false);
+				}
+			}
+			function rightout(){
+				var show = document.getElementById('show');
+				alert(show.lastChild.innerHTML);
+				show.removeChild(show.lastChild);
+			}
+			function init(){
+				document.addEventListener('click', function(e){
+					var target = e.target;
+					switch(target.id){
+						case 'leftin':
+						    leftin();
+						    break;
+						case 'leftout':
+						    leftout();
+						    break;
+						case 'rightin':
+						    rightin();
+						    break;
+						case 'rightout':
+						    rightout();
+						    break;
+						case 'check':
+						    check();
+						    break;
+					}
+				});
+			}
+			init();
+		</script>
+	</body>
+</html>
