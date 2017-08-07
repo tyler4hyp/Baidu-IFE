@@ -1,0 +1,13 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+table{
+	margin: 0 auto;
+}
+table td:nth-child(1){
+	text-align: right;
+}
+#subbtn{
+	text-align: right;
+}

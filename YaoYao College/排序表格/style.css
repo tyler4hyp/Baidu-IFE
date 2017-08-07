@@ -1,0 +1,51 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+table{
+	border-collapse: collapse;
+	margin: 30px auto;
+}
+table, td, th{
+	border: 1px solid black;
+}
+td,th{
+	padding: 10px 30px 10px 30px;
+	text-align: center;
+}
+tr>th:nth-child(1){
+	padding: 10px 40px 10px 40px;
+}
+th{
+	background-color: gray;
+}
+th>div{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+th>div{
+	color: white;
+	height: 30px;
+	line-height: 30px;
+}
+.order{
+	margin-left: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;	
+}
+.ao{
+	width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid white;
+}
+.do{
+	width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 10px solid white;
+}

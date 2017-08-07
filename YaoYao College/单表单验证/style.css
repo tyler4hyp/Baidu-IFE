@@ -1,0 +1,13 @@
+div,p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#input{
+	width: 200px;
+	line-height: 20px;
+}
+#btn{
+	margin-left: 10px;
+	font-size: 20px;
+}
